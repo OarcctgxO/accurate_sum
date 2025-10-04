@@ -9,14 +9,14 @@ def accurate_sum(needed: int, nums: list[int])-> tuple[int, list[int]]:
         tuple[int, list[int]]: кортеж из ближайшей достижимой суммы и списка, который формирует эту сумму.
     """
     #тут могла быть ваша реклама (проверка типа вводимых данных)
-    total_sum = sum(nums)
+    sorted_nums = nums[:]
+    sorted_nums.sort(reverse=True) #по убыванию
+    
+    total_sum = sum(sorted_nums)
     if needed == 0 or total_sum == 0:
         return 0, []
     if needed >= total_sum:
-        return total_sum, nums
-    
-    sorted_nums = nums[:]
-    sorted_nums.sort(reverse=True) #по убыванию
+        return total_sum, sorted_nums
     
     max_num = sorted_nums[0] #самый большой элемент списка
     
