@@ -46,8 +46,6 @@ def accurate_sum(needed: int, nums: list[int])-> tuple[int, list[int]]:
                 current_sum -= n
         if current_sum == 0:
             break
-        
-    final_list.sort(reverse=True)
     
     return final_sum, final_list
 
