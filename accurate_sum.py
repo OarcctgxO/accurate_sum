@@ -24,9 +24,7 @@ def accurate_sum(needed: int, nums: list[int])-> list[int]:
         return sorted_nums
     elif needed > total_sum:
         raise ValueError('Запрашиваемая сумма несоставима этими элементами')
-    
-    max_num = sorted_nums[0] #самый большой элемент списка
-    
+   
     max_sum = needed
     dp = [False] * (max_sum + 1)
     dp[0] = True #сумма 0 всегда достижима :)
