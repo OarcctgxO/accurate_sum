@@ -8,13 +8,17 @@ def accurate_sum(needed: int, nums: list[int])-> tuple[int, list[int]]:
     Выводит:
         tuple[int, list[int]]: кортеж из ближайшей достижимой суммы и списка, который формирует эту сумму.
     """
-    #тут могла быть ваша реклама (проверка типа вводимых данных)
+    #проверка введенных данных
+    for i in nums:
+        if not (i > 0 and isinstance(i, int)):
+            raise ValueError(f'Ненатуральное число в списке: {i}')
+    if not (needed > 0 and isinstance(needed, int)):
+        raise ValueError(f'Запрашиваемая сумма ненатуральна: {i}')
+    
     sorted_nums = nums[:]
     sorted_nums.sort(reverse=True) #по убыванию
     
     total_sum = sum(sorted_nums)
-    if needed == 0 or total_sum == 0:
-        return 0, []
     if needed >= total_sum:
         return total_sum, sorted_nums
     
