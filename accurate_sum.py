@@ -13,7 +13,7 @@ def accurate_sum(needed: int, nums: list[int])-> list[int]:
         if not (i > 0 and isinstance(i, int)):
             raise ValueError(f'Ненатуральное число в списке: {i}')
     if not (needed > 0 and isinstance(needed, int)):
-        raise ValueError(f'Запрашиваемая сумма ненатуральна: {i}')
+        raise ValueError(f'Запрашиваемая сумма ненатуральна: {needed}')
     
     #сортировка
     sorted_nums = nums[:]
