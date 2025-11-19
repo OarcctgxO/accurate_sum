@@ -28,12 +28,15 @@ def accurate_sum(needed: int, nums: list[int])-> list[int]:
     max_sum = needed
     dp = [False] * (max_sum + 1)
     dp[0] = True #сумма 0 всегда достижима :)
+    prev = [-1] * (max_sum + 1) #самый большой элемент, с которым достижима сумма (меньше не нужны)
+    prev[0] = 0
     
     #заполнение массива достижимых сумм
     for n in sorted_nums:
         for i in range(max_sum, n-1, -1):
-            if dp[i-n]:
+            if dp[i-n] and not dp[i]:
                 dp[i] = True
+                prev[i] = n            
     
     #проверка достижимости
     if not dp[needed]:
@@ -42,13 +45,11 @@ def accurate_sum(needed: int, nums: list[int])-> list[int]:
     #восстановление использованных элементов
     current_sum = needed
     final_list = []
-    for n in sorted_nums:
-        if (current_sum - n) >= 0:
-            if dp[current_sum-n]:
-                final_list.append(n)
-                current_sum -= n
-        if current_sum == 0:
-            break
+    while current_sum:
+        final_list.append(prev[current_sum])
+        current_sum -= prev[current_sum]
+
+    final_list.sort(reverse=True)
     
     return final_list
 
