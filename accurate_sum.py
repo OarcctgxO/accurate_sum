@@ -25,29 +25,27 @@ def accurate_sum(needed: int, nums: list[int])-> list[int]:
     elif needed > total_sum:
         raise ValueError('Запрашиваемая сумма несоставима этими элементами')
    
+    #массив достижимых сумм с последним добавленным элементом (самый большой)
     max_sum = needed
-    dp = [False] * (max_sum + 1)
-    dp[0] = True #сумма 0 всегда достижима :)
-    prev = [-1] * (max_sum + 1) #самый большой элемент, с которым достижима сумма (меньше не нужны)
-    prev[0] = 0
+    dp = [-1] * (max_sum + 1)
+    dp[0] = 0
     
     #заполнение массива достижимых сумм
     for n in sorted_nums:
         for i in range(max_sum, n-1, -1):
-            if dp[i-n] and not dp[i]:
-                dp[i] = True
-                prev[i] = n            
+            if dp[i-n] != -1 and dp[i] == -1:
+                dp[i] = n           
     
     #проверка достижимости
-    if not dp[needed]:
+    if dp[needed] == -1:
         raise ValueError('Данное число несоставимо этими элементами')
     
     #восстановление использованных элементов
     current_sum = needed
     final_list = []
     while current_sum:
-        final_list.append(prev[current_sum])
-        current_sum -= prev[current_sum]
+        final_list.append(dp[current_sum])
+        current_sum -= dp[current_sum]
 
     final_list.sort(reverse=True)
     
