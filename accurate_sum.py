@@ -29,15 +29,21 @@ def accurate_sum(needed: int, nums: list[int])-> list[int]:
     max_sum = needed
     dp = [-1] * (max_sum + 1)
     dp[0] = 0
+    exit_flag = False
     
     #заполнение массива достижимых сумм
     for n in sorted_nums:
         for i in range(max_sum, n-1, -1):
             if dp[i-n] != -1 and dp[i] == -1:
-                dp[i] = n           
+                dp[i] = n
+                if i == needed:
+                    exit_flag = True
+                    break
+        if exit_flag:
+            break
     
     #проверка достижимости
-    if dp[needed] == -1:
+    if not exit_flag:
         raise ValueError('Данное число несоставимо этими элементами')
     
     #восстановление использованных элементов
