@@ -25,33 +25,38 @@ def accurate_sum(needed: int, nums: list[int])-> tuple[int, list[int]]:
     max_num = sorted_nums[0] #самый большой элемент списка
     
     max_sum = needed + max_num #разумный предел искомой суммы
-    dp = [False] * (max_sum) #dp[max_sum] не нужен, потому что тогда достижим будет и max_sum - max_num = needed
-    dp[0] = True #сумма 0 всегда достижима :)
-    
+    dp = [-1] * (max_sum) #dp[max_sum] не нужен, потому что тогда достижим будет и max_sum - max_num = needed
+    dp[0] = 0 #сумма 0 всегда достижима :)
+    exit_flag = False
     #заполнение массива достижимых сумм
     for n in sorted_nums:
         for i in range(max_sum-1, n-1, -1):
-            if dp[i-n]:
-                dp[i] = True
+            if dp[i-n] != -1 and dp[i] == -1:
+                dp[i] = n
+                if i == needed:
+                    exit_flag = True
+                    break
+        if exit_flag:
+            break
     
     #нахождение ближайшей достижимой суммы (сверху)
-    for i in range(needed, max_sum):
-        if dp[i]:
-            final_sum = i
-            break
+    if exit_flag:
+        final_sum = needed
+    else:
+        for i in range(needed + 1, max_sum):
+            if dp[i] != -1:
+                final_sum = i
+                break
     
     #восстановление использованных элементов
     current_sum = final_sum
     final_list = []
-    for n in sorted_nums:
-        if (current_sum - n) >= 0:
-            if dp[current_sum-n]:
-                final_list.append(n)
-                current_sum -= n
-        if current_sum == 0:
-            break
-    
-    return final_sum, final_list
+    while current_sum > 0:
+        n = dp[current_sum]
+        final_list.append(n)
+        current_sum -= n
+        
+    return final_sum, final_list[::-1]
 
 
 if __name__ == "__main__":
