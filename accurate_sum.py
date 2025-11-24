@@ -52,10 +52,8 @@ def accurate_sum(needed: int, nums: list[int])-> list[int]:
     while current_sum:
         final_list.append(dp[current_sum])
         current_sum -= dp[current_sum]
-
-    final_list.sort(reverse=True)
     
-    return final_list
+    return final_list[::-1]
 
 
 if __name__ == "__main__":
