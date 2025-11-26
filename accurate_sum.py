@@ -1,36 +1,39 @@
-def accurate_sum(needed: int, nums: list[int])-> tuple[int, list[int]]:
-    """Находит комбинацию ближайшей к запрашиваемому числу суммы (>= needed) и возвращает эту сумму и использованные слагаемые.
+def accurate_sum(needed: int, nums: list[int])-> list[int]:
+    """Находит подмножество nums, сумма которого равна needed. Если не существует - поднимает ValueError. Только натуральные числа.
 
     Аргументы:
-        needed (int): запрашиваемое число, для которого будет находится ближайшее составимое число;
-        nums (list[int]): список элементов, из которых составляется сумма.
+        needed (int): число, которое будет суммой подмножества;
+        nums (list[int]): множество, из которого будет искаться подмножество
 
     Выводит:
-        tuple[int, list[int]]: кортеж из ближайшей достижимой суммы и списка, который формирует эту сумму.
+        list[int]: искомое подмножество, сумма которого равна needed.
     """
     #проверка введенных данных
     for i in nums:
         if not (i > 0 and isinstance(i, int)):
             raise ValueError(f'Ненатуральное число в списке: {i}')
     if not (needed > 0 and isinstance(needed, int)):
-        raise ValueError(f'Запрашиваемая сумма ненатуральна: {i}')
+        raise ValueError(f'Запрашиваемая сумма ненатуральна: {needed}')
     
+    #сортировка
     sorted_nums = nums[:]
     sorted_nums.sort(reverse=True) #по убыванию
     
     total_sum = sum(sorted_nums)
-    if needed >= total_sum:
-        return total_sum, sorted_nums
-    
-    max_num = sorted_nums[0] #самый большой элемент списка
-    
-    max_sum = needed + max_num #разумный предел искомой суммы
-    dp = [-1] * (max_sum) #dp[max_sum] не нужен, потому что тогда достижим будет и max_sum - max_num = needed
-    dp[0] = 0 #сумма 0 всегда достижима :)
+    if needed == total_sum:
+        return sorted_nums
+    elif needed > total_sum:
+        raise ValueError('Запрашиваемая сумма несоставима этими элементами')
+   
+    #массив достижимых сумм с последним добавленным элементом (самый большой)
+    max_sum = needed
+    dp = [-1] * (max_sum + 1)
+    dp[0] = 0
     exit_flag = False
+    
     #заполнение массива достижимых сумм
     for n in sorted_nums:
-        for i in range(max_sum-1, n-1, -1):
+        for i in range(max_sum, n-1, -1):
             if dp[i-n] != -1 and dp[i] == -1:
                 dp[i] = n
                 if i == needed:
@@ -39,24 +42,18 @@ def accurate_sum(needed: int, nums: list[int])-> tuple[int, list[int]]:
         if exit_flag:
             break
     
-    #нахождение ближайшей достижимой суммы (сверху)
-    if exit_flag:
-        final_sum = needed
-    else:
-        for i in range(needed + 1, max_sum):
-            if dp[i] != -1:
-                final_sum = i
-                break
+    #проверка достижимости
+    if not exit_flag:
+        raise ValueError('Данное число несоставимо этими элементами')
     
     #восстановление использованных элементов
-    current_sum = final_sum
+    current_sum = needed
     final_list = []
-    while current_sum > 0:
-        n = dp[current_sum]
-        final_list.append(n)
-        current_sum -= n
-        
-    return final_sum, final_list[::-1]
+    while current_sum:
+        final_list.append(dp[current_sum])
+        current_sum -= dp[current_sum]
+    
+    return final_list[::-1]
 
 
 if __name__ == "__main__":
