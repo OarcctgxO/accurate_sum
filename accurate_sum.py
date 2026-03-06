@@ -44,7 +44,7 @@ def accurate_sum(needed: int, nums: list[int])-> list[int]:
     
     #проверка достижимости
     if not exit_flag:
-        raise ValueError('Данное число несоставимо этими элементами')
+        raise ValueError('Запрашиваемая сумма несоставима этими элементами')
     
     #восстановление использованных элементов
     current_sum = needed
