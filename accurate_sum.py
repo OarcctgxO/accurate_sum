@@ -16,12 +16,11 @@ def accurate_sum(needed: int, nums: list[int])-> list[int]:
         raise ValueError(f'Запрашиваемая сумма ненатуральна: {needed}')
     
     #сортировка
-    sorted_nums = nums[:]
-    sorted_nums.sort(reverse=True) #по убыванию
+    nums.sort(reverse=True) #по убыванию
     
-    total_sum = sum(sorted_nums)
+    total_sum = sum(nums)
     if needed == total_sum:
-        return sorted_nums
+        return nums
     elif needed > total_sum:
         raise ValueError('Запрашиваемая сумма несоставима этими элементами')
    
@@ -32,7 +31,7 @@ def accurate_sum(needed: int, nums: list[int])-> list[int]:
     exit_flag = False
     
     #заполнение массива достижимых сумм
-    for n in sorted_nums:
+    for n in nums:
         for i in range(max_sum, n-1, -1):
             if dp[i-n] != -1 and dp[i] == -1:
                 dp[i] = n
